@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 require '/home/pakwheels/Documents/Pakwheels/Atm_Simulator_MVC/app/controllers/admin_controller.rb'
+require '/home/pakwheels/Documents/Pakwheels/Atm_Simulator_MVC/app/controllers/user_controller.rb'
 
 class Display
   def initialize
     @ac_obj = AdminController.new()
+    @uc_obj = UserController.new()
   end
 
   def admin_display
@@ -64,6 +66,36 @@ class Display
 
   def user_display
 
+    print("Please enter your user pin : ")
+    user_pin = gets.chomp().to_i
+
+    if @uc_obj.verify_user_controller(user_pin) == true
+
+      print('Hello ', @uc_obj.find_data_controller(user_pin)['name'])
+      print("\n You can do the following : \n" )
+      print("1. Withdraw Amount \n")
+      print("2. View Balance \n")
+
+      print("\n Please enter your choice : ")
+      choice = gets.chomp().to_i
+
+      if choice == 1
+        print("Please enter the amount you want to withdraw : ")
+        amount = gets.chomp().to_i
+        @uc_obj.withdraw_controller(amount, user_pin)
+        print("Withdraw Completed.")
+
+      elsif choice == 2
+        print("Your account details are : \n")
+        data = @uc_obj.find_data_controller(user_pin)
+        print("\n Name : ", data['name'])
+        print("\n ID : ", data['id'])
+        print("\n Balance : ", data['balance'])
+      end
+
+    end
+
+
   end
 
   def main_display
@@ -77,6 +109,8 @@ class Display
 
     if choice == 1
       admin_display
+    elsif choice == 2
+      user_display
     end
   end
 
